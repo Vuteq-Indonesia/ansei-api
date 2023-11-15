@@ -1,0 +1,30 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model RawData {
+  id             Int      @id @default(autoincrement())
+  date           DateTime @db.Date
+  vendorCode     String
+  vendorName     String
+  receivingArea  String
+  deliveryDate   DateTime @db.Date
+  deliveryPeriod Int
+  firm           String
+  classification String
+  poNumber       String
+  item           Int
+  partsNumber    String
+  partsName      String
+  orderQuantity  Int
+
+  @@map("raw_data") // Optional: Jika nama tabel di database tidak sama dengan nama model
+}
