@@ -28,3 +28,12 @@ model RawData {
 
   @@map("raw_data") // Optional: Jika nama tabel di database tidak sama dengan nama model
 }
+
+model history {
+  id          Int      @id @default(autoincrement())
+  // id_part     String   @db.VarChar(100)
+  timestamp   DateTime @db.Date
+  part_number String   @db.VarChar(255)
+  status      String?  @db.VarChar(100)
+  operator    String?  @db.VarChar(50)
+}

@@ -1,6 +1,6 @@
-import {NestFactory} from '@nestjs/core';
-import {AppModule} from './app.module';
-import {Transport} from '@nestjs/microservices';
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice(AppModule, {
@@ -10,6 +10,7 @@ async function bootstrap() {
       port: 3400,
     },
   });
-  await app.listen()
+  await app.listen();
 }
-bootstrap();
+
+bootstrap().then((r) => console.log('Ansei Microservice is listening'));
