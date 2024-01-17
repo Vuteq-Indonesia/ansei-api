@@ -1,5 +1,5 @@
 export class CreateHistoryDto {
-  id: number;
+  // id: number;
   part_number: string;
   operator: string;
 }

@@ -8,14 +8,14 @@ export class HistoriesService {
   constructor(private prismaService: PrismaService) {}
   async create(createHistoryDto: CreateHistoryDto) {
     try {
-      const isThere = await this.prismaService.rawData.findUnique({
+      const isThere = await this.prismaService.rawData.findFirst({
         where: {
-          id: createHistoryDto.id,
+          partsNumber: createHistoryDto.part_number,
         },
       });
       if (!isThere) {
         throw new RpcException(
-          new ConflictException('Kode PCC Tidak Ditemukan di Database'),
+          new ConflictException('Kode Part Number Tidak Ditemukan di Database'),
         );
       }
       const isNotSubmitted = await this.prismaService.history.findMany({
@@ -26,7 +26,7 @@ export class HistoriesService {
       });
       if (isNotSubmitted.length > 0) {
         throw new RpcException(
-          new ConflictException('Kode PCC Ini Sudah Di Input'),
+          new ConflictException('Kode Part Number Ini Sudah Di Input'),
         );
       }
       return this.prismaService.history.createMany({
@@ -71,14 +71,14 @@ export class HistoriesService {
 
   async createFailed(createHistoryDto: CreateHistoryDto) {
     try {
-      const isThere = await this.prismaService.rawData.findUnique({
+      const isThere = await this.prismaService.rawData.findFirst({
         where: {
-          id: createHistoryDto.id,
+          partsNumber: createHistoryDto.part_number,
         },
       });
       if (!isThere) {
         throw new RpcException(
-          new ConflictException('Kode PCC Tidak Ditemukan di Database'),
+          new ConflictException('Kode Part Number Tidak Ditemukan di Database'),
         );
       }
       return this.prismaService.history.createMany({
