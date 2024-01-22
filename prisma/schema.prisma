@@ -18,9 +18,9 @@ model RawData {
   receivingArea  String
   deliveryDate   DateTime @db.Date
   deliveryPeriod Int
-  firm           String
-  classification String
-  poNumber       String
+  firm           String?
+  classification String?
+  poNumber       String?
   item           Int
   partsNumber    String
   partsName      String

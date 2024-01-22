@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, Logger } from '@nestjs/common';
 import { CreateRawDto } from './dto/create-raw.dto';
 import { UpdateRawDto } from './dto/update-raw.dto';
 import { PrismaService } from 'nestjs-prisma';
@@ -14,6 +14,7 @@ export class RawService {
         data: createRawDto,
       });
     } catch (e) {
+      Logger.log('Logger bos: ' + e);
       throw new RpcException(new ConflictException('Raw Data was duplicate'));
     }
   }
