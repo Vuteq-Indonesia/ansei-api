@@ -10,18 +10,18 @@ export class HistoriesService {
     try {
       const isThere = await this.prismaService.rawData.findFirst({
         where: {
-          partsNumber: createHistoryDto.part_number,
+          poNumber: createHistoryDto.po_number,
         },
       });
       if (!isThere) {
         throw new RpcException(
-          new ConflictException('Kode Part Number Tidak Ditemukan di Database'),
+          new ConflictException('Kode PO Number Tidak Ditemukan di Database'),
         );
       }
       const isNotSubmitted = await this.prismaService.history.findMany({
         where: {
           status: 'BERHASIL',
-          part_number: createHistoryDto.part_number,
+          po_number: createHistoryDto.po_number,
         },
       });
       if (isNotSubmitted.length > 0) {
@@ -31,7 +31,7 @@ export class HistoriesService {
       }
       return this.prismaService.history.createMany({
         data: {
-          part_number: createHistoryDto.part_number,
+          po_number: createHistoryDto.po_number,
           status: 'BERHASIL',
           operator: createHistoryDto.operator,
           timestamp: new Date(),
@@ -73,7 +73,7 @@ export class HistoriesService {
     try {
       const isThere = await this.prismaService.rawData.findFirst({
         where: {
-          partsNumber: createHistoryDto.part_number,
+          poNumber: createHistoryDto.po_number,
         },
       });
       if (!isThere) {
@@ -83,7 +83,7 @@ export class HistoriesService {
       }
       return this.prismaService.history.createMany({
         data: {
-          part_number: createHistoryDto.part_number,
+          po_number: createHistoryDto.po_number,
           status: 'GAGAL',
           operator: createHistoryDto.operator,
           timestamp: new Date(),
