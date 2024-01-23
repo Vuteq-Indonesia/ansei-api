@@ -45,7 +45,11 @@ export class RawService {
     return `This action updates a #${id} raw`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} raw`;
+  remove() {
+    try {
+      return this.prismaService.rawData.deleteMany({});
+    } catch (e) {
+      throw new RpcException(new ConflictException('There was problem'));
+    }
   }
 }

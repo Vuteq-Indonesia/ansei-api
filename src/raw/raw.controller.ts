@@ -22,8 +22,8 @@ export class RawController {
     return this.rawService.findOne(id);
   }
 
-  @MessagePattern('removeRaw')
-  remove(@Payload() id: number) {
-    return this.rawService.remove(id);
+  @MessagePattern('deleteAllRaw')
+  remove() {
+    return this.rawService.remove();
   }
 }

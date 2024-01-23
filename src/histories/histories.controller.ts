@@ -2,6 +2,7 @@ import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { HistoriesService } from './histories.service';
 import { CreateHistoryDto } from './dto/create-history.dto';
+import { CheckHistoryDto } from './dto/check-history.dto';
 
 @Controller()
 export class HistoriesController {
@@ -22,8 +23,8 @@ export class HistoriesController {
     return this.historiesService.findAll(options);
   }
 
-  @MessagePattern('findOneHistory')
-  findOne(@Payload() id: number) {
-    return this.historiesService.findOne(id);
+  @MessagePattern('checkHistory')
+  findOne(@Payload() checkHistory: CheckHistoryDto) {
+    return this.historiesService.checkHistory(checkHistory);
   }
 }

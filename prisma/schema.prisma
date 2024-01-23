@@ -30,10 +30,11 @@ model RawData {
 }
 
 model history {
-  id        Int      @id @default(autoincrement())
+  id           Int      @id @default(autoincrement())
   // id_part     String   @db.VarChar(100)
-  timestamp DateTime @db.Date
-  po_number String   @db.VarChar(255)
-  status    String?  @db.VarChar(100)
-  operator  String?  @db.VarChar(100)
+  timestamp    DateTime @db.Date
+  po_number    String   @db.VarChar(255)
+  parts_number String   @db.VarChar(255)
+  status       String?  @db.VarChar(100)
+  operator     String?  @db.VarChar(100)
 }
