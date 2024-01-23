@@ -78,6 +78,7 @@ export class HistoriesService {
       const isThere = await this.prismaService.rawData.findFirst({
         where: {
           poNumber: createHistoryDto.po_number,
+          partsNumber: createHistoryDto.parts_number,
         },
       });
       if (!isThere) {
