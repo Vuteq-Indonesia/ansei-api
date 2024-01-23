@@ -32,7 +32,7 @@ export class HistoriesService {
           new ConflictException('Kode Part Number Ini Sudah Di Input'),
         );
       }
-      return this.prismaService.history.createMany({
+      return this.prismaService.history.create({
         data: {
           po_number: createHistoryDto.po_number,
           parts_number: createHistoryDto.parts_number,
@@ -86,7 +86,7 @@ export class HistoriesService {
           new ConflictException('Kode Part Number Tidak Ditemukan di Database'),
         );
       }
-      return this.prismaService.history.createMany({
+      return this.prismaService.history.create({
         data: {
           po_number: createHistoryDto.po_number,
           parts_number: createHistoryDto.parts_number,
