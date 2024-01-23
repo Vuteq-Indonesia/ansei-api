@@ -61,8 +61,8 @@ export class HistoriesService {
       return {
         data: datas,
         totalData: count,
-        limit: options.pageSize ?? 0,
-        currentPage: options.pageNumber ?? 0,
+        limit: options.pageSize ?? 100,
+        currentPage: options.pageNumber ?? 1,
       };
     } catch (e) {
       throw new RpcException(new ConflictException('There was problem'));
