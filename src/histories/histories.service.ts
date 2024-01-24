@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, Logger } from '@nestjs/common';
 import { CreateHistoryDto } from './dto/create-history.dto';
 import { RpcException } from '@nestjs/microservices';
 import { PrismaService } from 'nestjs-prisma';
@@ -20,18 +20,18 @@ export class HistoriesService {
           new ConflictException('Kode PO Number Tidak Ditemukan di Database'),
         );
       }
-      const isNotSubmitted = await this.prismaService.history.findMany({
-        where: {
-          status: 'BERHASIL',
-          po_number: createHistoryDto.po_number,
-          parts_number: createHistoryDto.parts_number,
-        },
-      });
-      if (isNotSubmitted.length > 0) {
-        throw new RpcException(
-          new ConflictException('Kode Part Number Ini Sudah Di Input'),
-        );
-      }
+      // const isNotSubmitted = await this.prismaService.history.findMany({
+      //   where: {
+      //     status: 'BERHASIL',
+      //     po_number: createHistoryDto.po_number,
+      //     parts_number: createHistoryDto.parts_number,
+      //   },
+      // });
+      // if (isNotSubmitted.length > 0) {
+      //   throw new RpcException(
+      //     new ConflictException('Kode Part Number Ini Sudah Di Input'),
+      //   );
+      // }
       return this.prismaService.history.create({
         data: {
           po_number: createHistoryDto.po_number,
@@ -42,6 +42,7 @@ export class HistoriesService {
         },
       });
     } catch (e) {
+      Logger.log(e);
       throw new RpcException(new ConflictException('Product was duplicate'));
     }
   }
