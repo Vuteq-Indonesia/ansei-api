@@ -1,9 +1,9 @@
 export class CreateRawDto {
-  date: string;
+  date: Date;
   vendorCode: string;
   vendorName: string;
   receivingArea: string;
-  deliveryDate: string;
+  deliveryDate: Date;
   deliveryPeriod: number;
   firm: string;
   classification: string;

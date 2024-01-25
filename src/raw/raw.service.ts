@@ -3,6 +3,7 @@ import { CreateRawDto } from './dto/create-raw.dto';
 import { UpdateRawDto } from './dto/update-raw.dto';
 import { PrismaService } from 'nestjs-prisma';
 import { RpcException } from '@nestjs/microservices';
+import * as moment from 'moment-timezone';
 
 @Injectable()
 export class RawService {
@@ -10,18 +11,18 @@ export class RawService {
 
   async create(createRawDto: CreateRawDto[]) {
     try {
-      function convertDateFormat(dateString: string) {
-        const [day, month, year] = dateString.split('/');
-        const fullYear = `20${year}`; // Atau sesuaikan dengan logika Anda untuk menentukan tahun penuh
-        return `${fullYear}/${month}/${day}`;
-      }
-      // Konversi format tanggal untuk setiap objek dalam array
-      const formattedCreateRawDtos = createRawDto.map((dto) => ({
-        ...dto,
-        date: new Date(convertDateFormat(dto.date)),
-        deliveryDate: new Date(convertDateFormat(dto.deliveryDate)),
-      }));
-
+      // Konversi format tanggal dan sesuaikan zona waktu untuk setiap objek dalam array
+      const formattedCreateRawDtos = createRawDto.map((dto) => {
+        Logger.log(moment.utc(dto.deliveryDate).tz('Asia/Jakarta').toDate());
+        return {
+          ...dto,
+          date: moment.utc(dto.date).tz('Asia/Jakarta').toDate(),
+          deliveryDate: moment
+            .utc(dto.deliveryDate)
+            .tz('Asia/Jakarta')
+            .toDate(),
+        };
+      });
       // Buat data di database menggunakan Prisma
       return this.prismaService.rawData.createMany({
         data: formattedCreateRawDtos,
