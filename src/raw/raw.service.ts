@@ -10,11 +10,16 @@ export class RawService {
 
   async create(createRawDto: CreateRawDto[]) {
     try {
+      function convertDateFormat(dateString: string) {
+        const [day, month, year] = dateString.split('/');
+        const fullYear = `20${year}`; // Atau sesuaikan dengan logika Anda untuk menentukan tahun penuh
+        return `${fullYear}/${month}/${day}`;
+      }
       // Konversi format tanggal untuk setiap objek dalam array
       const formattedCreateRawDtos = createRawDto.map((dto) => ({
         ...dto,
-        date: new Date(dto.date + ' UTC'),
-        deliveryDate: new Date(dto.deliveryDate + ' UTC'),
+        date: new Date(convertDateFormat(dto.date)),
+        deliveryDate: new Date(convertDateFormat(dto.deliveryDate)),
       }));
 
       // Buat data di database menggunakan Prisma
