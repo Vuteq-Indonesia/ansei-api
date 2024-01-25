@@ -15,11 +15,8 @@ export class RawService {
       const formattedCreateRawDtos = createRawDto.map((dto) => {
         return {
           ...dto,
-          date: moment.utc(dto.date).tz('Asia/Jakarta').format(),
-          deliveryDate: moment
-            .utc(dto.deliveryDate)
-            .tz('Asia/Jakarta')
-            .format(),
+          date: moment.utc(dto.date).toDate(),
+          deliveryDate: moment.utc(dto.deliveryDate).toDate(),
         };
       });
       // Buat data di database menggunakan Prisma
