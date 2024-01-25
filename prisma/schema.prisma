@@ -12,11 +12,11 @@ datasource db {
 
 model RawData {
   id             Int      @id @default(autoincrement())
-  date           DateTime @db.Date
+  date           DateTime @db.DateTime()
   vendorCode     String
   vendorName     String
   receivingArea  String
-  deliveryDate   DateTime @db.Date
+  deliveryDate   DateTime @db.DateTime()
   deliveryPeriod Int
   firm           String?
   classification String?

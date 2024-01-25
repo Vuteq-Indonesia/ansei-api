@@ -13,14 +13,13 @@ export class RawService {
     try {
       // Konversi format tanggal dan sesuaikan zona waktu untuk setiap objek dalam array
       const formattedCreateRawDtos = createRawDto.map((dto) => {
-        Logger.log(moment.utc(dto.deliveryDate).tz('Asia/Jakarta').toDate());
         return {
           ...dto,
-          date: moment.utc(dto.date).tz('Asia/Jakarta').toDate(),
+          date: moment.utc(dto.date).tz('Asia/Jakarta').format(),
           deliveryDate: moment
             .utc(dto.deliveryDate)
             .tz('Asia/Jakarta')
-            .toDate(),
+            .format(),
         };
       });
       // Buat data di database menggunakan Prisma
@@ -39,9 +38,14 @@ export class RawService {
         skip: (options.pageNumber - 1) * parseInt(options.pageSize), // Menghitung berapa data yang harus dilewati (skip)
         take: parseInt(options.pageSize), // Mengambil jumlah data sebanyak yang diinginkan (limit)
       });
+      const formattedDatas = datas.map((data) => ({
+        ...data,
+        date: moment(data.date).format('YYYY-MM-DD'),
+        deliveryDate: moment(data.deliveryDate).format('YYYY-MM-DD'),
+      }));
       const count = await this.prismaService.rawData.count();
       return {
-        data: datas,
+        data: formattedDatas,
         totalData: count,
         limit: options.pageSize,
         currentPage: options.pageNumber,
