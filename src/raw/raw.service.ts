@@ -18,8 +18,10 @@ export class RawService {
       // Konversi format tanggal untuk setiap objek dalam array
       const formattedCreateRawDtos = createRawDto.map((dto) => ({
         ...dto,
-        date: new Date(convertDateFormat(dto.date)),
-        deliveryDate: new Date(convertDateFormat(dto.deliveryDate)),
+        date: new Date(convertDateFormat(dto.date)).toDateString(),
+        deliveryDate: new Date(
+          convertDateFormat(dto.deliveryDate),
+        ).toDateString(),
       }));
 
       // Buat data di database menggunakan Prisma
