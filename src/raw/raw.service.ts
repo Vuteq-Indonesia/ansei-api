@@ -10,8 +10,16 @@ export class RawService {
 
   async create(createRawDto: CreateRawDto[]) {
     try {
+      // Konversi format tanggal untuk setiap objek dalam array
+      const formattedCreateRawDtos = createRawDto.map((dto) => ({
+        ...dto,
+        date: new Date(dto.date + ' UTC'),
+        deliveryDate: new Date(dto.deliveryDate + ' UTC'),
+      }));
+
+      // Buat data di database menggunakan Prisma
       return this.prismaService.rawData.createMany({
-        data: createRawDto,
+        data: formattedCreateRawDtos,
       });
     } catch (e) {
       Logger.log('Logger bos: ' + e);
