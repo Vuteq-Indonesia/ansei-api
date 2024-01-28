@@ -1,15 +1,15 @@
 export class CreateRawDto {
-  date: Date;
-  vendorCode: string;
-  vendorName: string;
-  receivingArea: string;
-  deliveryDate: Date;
-  deliveryPeriod: number;
-  firm: string;
-  classification: string;
-  poNumber: string;
-  item: number;
-  partsNumber: string;
-  partsName: string;
-  orderQuantity: number;
+  po_id: string;
+  date: string;
+  delivery_date: string;
+  part_no: string;
+  part_name: string;
+  quantity: number;
+  id_part: string;
+  barcode: string;
+  receiving_area: string;
+  po_no: string;
+  model: string;
+  bagian_part: string;
+  delivery_period: string;
 }

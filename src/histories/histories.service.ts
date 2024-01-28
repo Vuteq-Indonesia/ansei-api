@@ -11,13 +11,25 @@ export class HistoriesService {
     try {
       const isThere = await this.prismaService.rawData.findFirst({
         where: {
-          poNumber: createHistoryDto.po_number,
-          partsNumber: createHistoryDto.parts_number,
+          po_id: createHistoryDto.po_id,
+        },
+      });
+      const isSubmitted = await this.prismaService.history.findMany({
+        where: {
+          status: 'BERHASIL',
+          po_id: createHistoryDto.po_id,
+          po_no: isThere.po_no,
+          part_no: createHistoryDto.part_no,
         },
       });
       if (!isThere) {
         throw new RpcException(
-          new ConflictException('Kode PO Number Tidak Ditemukan di Database'),
+          new ConflictException('Kode PO ID Tidak Ditemukan di Database'),
+        );
+      }
+      if (isSubmitted.length > 0) {
+        throw new RpcException(
+          new ConflictException('Kode PO ID Ini Sudah Di Input'),
         );
       }
       // const isNotSubmitted = await this.prismaService.history.findMany({
@@ -34,8 +46,9 @@ export class HistoriesService {
       // }
       return this.prismaService.history.create({
         data: {
-          po_number: createHistoryDto.po_number,
-          parts_number: createHistoryDto.parts_number,
+          po_id: createHistoryDto.po_id,
+          part_no: createHistoryDto.part_no,
+          po_no: isThere.po_no,
           status: 'BERHASIL',
           operator: createHistoryDto.operator,
           timestamp: new Date(),
@@ -43,7 +56,7 @@ export class HistoriesService {
       });
     } catch (e) {
       Logger.log(e);
-      throw new RpcException(new ConflictException('Product was duplicate'));
+      throw e ?? new RpcException(new ConflictException('There was problem'));
     }
   }
 
@@ -78,26 +91,26 @@ export class HistoriesService {
     try {
       const isThere = await this.prismaService.rawData.findFirst({
         where: {
-          poNumber: createHistoryDto.po_number,
-          partsNumber: createHistoryDto.parts_number,
+          po_id: createHistoryDto.po_id,
         },
       });
       if (!isThere) {
         throw new RpcException(
-          new ConflictException('Kode Part Number Tidak Ditemukan di Database'),
+          new ConflictException('Kode PO ID Tidak Ditemukan di Database'),
         );
       }
       return this.prismaService.history.create({
         data: {
-          po_number: createHistoryDto.po_number,
-          parts_number: createHistoryDto.parts_number,
+          po_id: createHistoryDto.po_id,
+          part_no: createHistoryDto.part_no,
+          po_no: isThere.po_no,
           status: 'GAGAL',
           operator: createHistoryDto.operator,
           timestamp: new Date(),
         },
       });
     } catch (e) {
-      throw new RpcException(new ConflictException('Product was duplicate'));
+      throw e ?? new RpcException(new ConflictException('There was problem'));
     }
   }
 
@@ -105,23 +118,22 @@ export class HistoriesService {
     try {
       const data = await this.prismaService.rawData.findFirst({
         where: {
-          poNumber: checkHistory.po_number,
-          partsNumber: checkHistory.part_number,
+          po_id: checkHistory.po_id,
         },
       });
       if (!data) {
         throw new RpcException(
-          new ConflictException(
-            'Kode PO/Kode Part Number Tidak Ditemukan di Database',
-          ),
+          new ConflictException('PO ID Tidak Ditemukan di Database'),
         );
       }
       return {
         message: 'Data Ditemukan',
-        partsNumber: data.partsNumber,
+        part_no: data.part_no,
+        barcode: data.barcode,
+        part_id: data.id_part,
       };
     } catch (e) {
-      throw new RpcException(new ConflictException('There was problem'));
+      throw e ?? new RpcException(new ConflictException('There was problem'));
     }
   }
 }

@@ -3,7 +3,6 @@ import { CreateRawDto } from './dto/create-raw.dto';
 import { UpdateRawDto } from './dto/update-raw.dto';
 import { PrismaService } from 'nestjs-prisma';
 import { RpcException } from '@nestjs/microservices';
-import * as moment from 'moment-timezone';
 
 @Injectable()
 export class RawService {
@@ -15,8 +14,6 @@ export class RawService {
       const formattedCreateRawDtos = createRawDto.map((dto) => {
         return {
           ...dto,
-          date: moment.utc(dto.date).format('YYYY-MM-DD'),
-          deliveryDate: moment.utc(dto.deliveryDate).format('YYYY-MM-DD'),
         };
       });
       // Buat data di database menggunakan Prisma
@@ -37,8 +34,6 @@ export class RawService {
       });
       const formattedDatas = datas.map((data) => ({
         ...data,
-        date: moment(data.date).format('YYYY-MM-DD'),
-        deliveryDate: moment(data.deliveryDate).format('YYYY-MM-DD'),
       }));
       const count = await this.prismaService.rawData.count();
       return {

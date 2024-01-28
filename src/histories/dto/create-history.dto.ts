@@ -1,6 +1,6 @@
 export class CreateHistoryDto {
   // id: number;
-  po_number: string;
-  parts_number: string;
+  part_no: string;
   operator: string;
+  po_id: string;
 }

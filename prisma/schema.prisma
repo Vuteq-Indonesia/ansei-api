@@ -11,30 +11,32 @@ datasource db {
 }
 
 model RawData {
-  id             Int     @id @default(autoincrement())
-  date           String
-  vendorCode     String
-  vendorName     String
-  receivingArea  String
-  deliveryDate   String
-  deliveryPeriod Int
-  firm           String?
-  classification String?
-  poNumber       String?
-  item           Int
-  partsNumber    String
-  partsName      String
-  orderQuantity  Int
+  id              Int     @id @default(autoincrement())
+  po_id           String
+  date            String?
+  delivery_date   String
+  part_no         String
+  part_name       String
+  quantity        Int
+  id_part         String
+  barcode         String
+  receiving_area  String
+  po_no           String
+  model           String
+  bagian_part     String
+  delivery_period String
 
   @@map("raw_data") // Optional: Jika nama tabel di database tidak sama dengan nama model
 }
 
-model history {
-  id           Int      @id @default(autoincrement())
-  // id_part     String   @db.VarChar(100)
-  timestamp    DateTime @default(now()) @db.Timestamp()
-  po_number    String   @db.VarChar(255)
-  parts_number String   @db.VarChar(255)
-  status       String?  @db.VarChar(100)
-  operator     String?  @db.VarChar(100)
+model History {
+  id        Int      @id @default(autoincrement())
+  timestamp DateTime @default(now()) @db.Timestamp()
+  po_no     String
+  po_id     String
+  status    String
+  part_no   String
+  operator  String
+
+  @@map("history") // Optional: Jika nama tabel di database tidak sama dengan nama model
 }
