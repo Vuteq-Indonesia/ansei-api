@@ -14,24 +14,24 @@ export class HistoriesService {
           po_id: createHistoryDto.po_id,
         },
       });
-      const isSubmitted = await this.prismaService.history.findMany({
-        where: {
-          status: 'BERHASIL',
-          po_id: createHistoryDto.po_id,
-          po_no: isThere.po_no,
-          part_no: createHistoryDto.part_no,
-        },
-      });
+      // const isSubmitted = await this.prismaService.history.findMany({
+      //   where: {
+      //     status: 'BERHASIL',
+      //     po_id: createHistoryDto.po_id,
+      //     po_no: isThere.po_no,
+      //     part_no: createHistoryDto.part_no,
+      //   },
+      // });
       if (!isThere) {
         throw new RpcException(
           new ConflictException('Kode PO ID Tidak Ditemukan di Database'),
         );
       }
-      if (isSubmitted.length > 0) {
-        throw new RpcException(
-          new ConflictException('Kode PO ID Ini Sudah Di Input'),
-        );
-      }
+      // if (isSubmitted.length > 0) {
+      //   throw new RpcException(
+      //     new ConflictException('Kode PO ID Ini Sudah Di Input'),
+      //   );
+      // }
       // const isNotSubmitted = await this.prismaService.history.findMany({
       //   where: {
       //     status: 'BERHASIL',
