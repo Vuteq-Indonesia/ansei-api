@@ -27,4 +27,9 @@ export class HistoriesController {
   findOne(@Payload() checkHistory: CheckHistoryDto) {
     return this.historiesService.checkHistory(checkHistory);
   }
+
+  @MessagePattern('dashboard')
+  dashboard() {
+    return this.historiesService.dashboard();
+  }
 }

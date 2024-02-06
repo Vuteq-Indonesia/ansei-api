@@ -14,36 +14,11 @@ export class HistoriesService {
           po_id: createHistoryDto.po_id,
         },
       });
-      // const isSubmitted = await this.prismaService.history.findMany({
-      //   where: {
-      //     status: 'BERHASIL',
-      //     po_id: createHistoryDto.po_id,
-      //     po_no: isThere.po_no,
-      //     part_no: createHistoryDto.part_no,
-      //   },
-      // });
       if (!isThere) {
         throw new RpcException(
           new ConflictException('Kode PO ID Tidak Ditemukan di Database'),
         );
       }
-      // if (isSubmitted.length > 0) {
-      //   throw new RpcException(
-      //     new ConflictException('Kode PO ID Ini Sudah Di Input'),
-      //   );
-      // }
-      // const isNotSubmitted = await this.prismaService.history.findMany({
-      //   where: {
-      //     status: 'BERHASIL',
-      //     po_number: createHistoryDto.po_number,
-      //     parts_number: createHistoryDto.parts_number,
-      //   },
-      // });
-      // if (isNotSubmitted.length > 0) {
-      //   throw new RpcException(
-      //     new ConflictException('Kode Part Number Ini Sudah Di Input'),
-      //   );
-      // }
       return this.prismaService.history.create({
         data: {
           po_id: createHistoryDto.po_id,
@@ -135,5 +110,44 @@ export class HistoriesService {
     } catch (e) {
       throw e ?? new RpcException(new ConflictException('There was problem'));
     }
+  }
+
+  async dashboard() {
+    const data: any = await this.prismaService.$queryRaw`SELECT
+            COUNT(*) as total,
+            SUM(CASE WHEN status = 'BERHASIL' THEN 1 ELSE 0 END) as success,
+            SUM(CASE WHEN status = 'GAGAL' THEN 1 ELSE 0 END) as failed
+        FROM history`;
+    const data2: any = await this.prismaService.$queryRaw`SELECT
+                                                              DATE_FORMAT(timestamp, '%Y-%m-%d') AS tanggal,
+                                                              COUNT(*) as total,
+                                                              SUM(CASE WHEN status = 'BERHASIL' THEN 1 WHEN status = 'GAGAL' THEN 1 ELSE 0 END) as total_success_failed
+                                                          FROM history
+                                                          WHERE timestamp >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+                                                          GROUP BY DATE_FORMAT(timestamp, '%Y-%m-%d')
+                                                          ORDER BY tanggal DESC`;
+    const data3 = await this.prismaService.history.findMany({
+      orderBy: {
+        timestamp: 'desc',
+      },
+      take: 10,
+    });
+
+    const formattedData = {
+      total: Number(data[0].total),
+      success: Number(data[0].success),
+      failed: Number(data[0].failed),
+    };
+    const formattedDailyData = data2.map((entry: any) => ({
+      Date: entry.tanggal,
+      total: Number(entry.total),
+      // total_success_failed: entry.total_success_failed,
+    }));
+
+    return {
+      all: formattedData,
+      daily: formattedDailyData,
+      lastTen: data3,
+    };
   }
 }
