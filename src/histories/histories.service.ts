@@ -77,7 +77,7 @@ export class HistoriesService {
       return this.prismaService.history.create({
         data: {
           po_id: createHistoryDto.po_id,
-          part_no: createHistoryDto.part_no,
+          part_no: isThere.part_no,
           po_no: isThere.po_no,
           status: 'GAGAL',
           operator: createHistoryDto.operator,
