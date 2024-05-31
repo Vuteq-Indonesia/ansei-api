@@ -1,8 +1,9 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req } from '@nestjs/common';
 import { Payload } from '@nestjs/microservices';
 import { HistoriesService } from './histories.service';
 import { CreateHistoryDto } from './dto/create-history.dto';
 import { Roles } from '../auth/decorators/roles.decorators';
+import { CheckHistoryDto } from './dto/check-history.dto';
 
 @Controller('histories')
 export class HistoriesController {
@@ -10,14 +11,20 @@ export class HistoriesController {
 
   @Roles(['ADMIN', 'OPERATOR'])
   @Post('')
-  create(@Payload() createHistoryDto: CreateHistoryDto) {
-    return this.historiesService.create(createHistoryDto);
+  create(@Payload() createHistoryDto: CreateHistoryDto, @Req() req: any) {
+    return this.historiesService.create(
+      createHistoryDto,
+      req['user']['username'],
+    );
   }
 
   @Roles(['ADMIN', 'OPERATOR'])
   @Post('failed')
-  createFailed(@Payload() createHistoryDto: CreateHistoryDto) {
-    return this.historiesService.createFailed(createHistoryDto);
+  createFailed(@Payload() createHistoryDto: CreateHistoryDto, @Req() req: any) {
+    return this.historiesService.createFailed(
+      createHistoryDto,
+      req['user']['username'],
+    );
   }
 
   @Roles(['ADMIN'])
@@ -26,10 +33,11 @@ export class HistoriesController {
     return this.historiesService.findAll(options);
   }
 
-  // @Roles(['ADMIN'])
-  // findOne(@Payload() checkHistory: CheckHistoryDto) {
-  //   return this.historiesService.checkHistory(checkHistory);
-  // }
+  @Roles(['ADMIN', 'OPERATOR'])
+  @Post('check')
+  findOne(@Body() checkHistoryDto: CheckHistoryDto) {
+    return this.historiesService.checkHistory(checkHistoryDto);
+  }
 
   @Roles(['ADMIN'])
   @Get('report')

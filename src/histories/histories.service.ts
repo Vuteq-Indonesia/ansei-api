@@ -7,7 +7,7 @@ import { CheckHistoryDto } from './dto/check-history.dto';
 @Injectable()
 export class HistoriesService {
   constructor(private prismaService: PrismaService) {}
-  async create(createHistoryDto: CreateHistoryDto) {
+  async create(createHistoryDto: CreateHistoryDto, operator: string) {
     try {
       const isThere = await this.prismaService.rawData.findFirst({
         where: {
@@ -25,7 +25,7 @@ export class HistoriesService {
           part_no: createHistoryDto.part_no,
           po_no: isThere.po_no,
           status: 'BERHASIL',
-          operator: createHistoryDto.operator,
+          operator: operator,
           timestamp: new Date(),
         },
       });
@@ -69,7 +69,7 @@ export class HistoriesService {
   //   return `This action returns a #${id} history`;
   // }
 
-  async createFailed(createHistoryDto: CreateHistoryDto) {
+  async createFailed(createHistoryDto: CreateHistoryDto, operator: string) {
     try {
       const isThere = await this.prismaService.rawData.findFirst({
         where: {
@@ -87,7 +87,7 @@ export class HistoriesService {
           part_no: isThere.part_no,
           po_no: isThere.po_no,
           status: 'GAGAL',
-          operator: createHistoryDto.operator,
+          operator: operator,
           timestamp: new Date(),
         },
       });
