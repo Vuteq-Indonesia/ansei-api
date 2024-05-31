@@ -40,11 +40,18 @@ export class HistoriesService {
       let datas = [];
       if (options.pageNumber > 0) {
         datas = await this.prismaService.history.findMany({
+          orderBy: {
+            timestamp: 'desc',
+          },
           skip: (options.pageNumber - 1) * parseInt(options.pageSize), // Menghitung berapa data yang harus dilewati (skip)
           take: parseInt(options.pageSize), // Mengambil jumlah data sebanyak yang diinginkan (limit)
         });
       } else {
-        datas = await this.prismaService.history.findMany();
+        datas = await this.prismaService.history.findMany({
+          orderBy: {
+            timestamp: 'desc',
+          },
+        });
       }
       const count = await this.prismaService.history.count();
       return {
@@ -58,9 +65,9 @@ export class HistoriesService {
     }
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} history`;
-  }
+  // findOne(id: string) {
+  //   return `This action returns a #${id} history`;
+  // }
 
   async createFailed(createHistoryDto: CreateHistoryDto) {
     try {

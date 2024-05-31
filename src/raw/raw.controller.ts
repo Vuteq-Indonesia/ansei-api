@@ -1,28 +1,45 @@
-import { Controller } from '@nestjs/common';
-import { MessagePattern, Payload } from '@nestjs/microservices';
+import {
+  Controller,
+  Delete,
+  Get,
+  Post,
+  Query,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { RawService } from './raw.service';
-import { CreateRawDto } from './dto/create-raw.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Roles } from '../auth/decorators/roles.decorators';
 
-@Controller()
+@Controller('datas')
 export class RawController {
   constructor(private readonly rawService: RawService) {}
 
-  @MessagePattern('createRaw')
-  create(@Payload() createRawDto: CreateRawDto[]) {
-    return this.rawService.create(createRawDto);
+  @Post()
+  @Roles(['ADMIN'])
+  @UseInterceptors(FileInterceptor('file'))
+  create(
+    @UploadedFile()
+    file: Express.Multer.File,
+  ) {
+    return this.rawService.create(file);
   }
 
-  @MessagePattern('findAllRaw')
-  findAll(@Payload() options: any) {
-    return this.rawService.findAll(options);
+  @Get()
+  @Roles(['ADMIN'])
+  findAll(
+    @Query('page') pageNumber?: number,
+    @Query('limit') pageSize?: number,
+  ) {
+    return this.rawService.findAll(pageNumber, pageSize);
   }
 
-  @MessagePattern('findOneRaw')
-  findOne(@Payload() id: number) {
-    return this.rawService.findOne(id);
-  }
+  // @MessagePattern('findOneRaw')
+  // findOne(@Payload() id: number) {
+  //   return this.rawService.findOne(id);
+  // }
 
-  @MessagePattern('deleteAllRaw')
+  @Delete()
   remove() {
     return this.rawService.remove();
   }
