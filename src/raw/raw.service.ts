@@ -1,6 +1,4 @@
 import { ConflictException, Injectable, Logger } from '@nestjs/common';
-import { CreateRawDto } from './dto/create-raw.dto';
-import { UpdateRawDto } from './dto/update-raw.dto';
 import { PrismaService } from 'nestjs-prisma';
 import { RpcException } from '@nestjs/microservices';
 import { ExcelService } from '../utils/excel.service';
@@ -19,7 +17,7 @@ export class RawService {
       const transformedData = data.map((rowData: any) => ({
         po_id: rowData['PO ID'],
         date: rowData['Date'],
-        delivery_date: rowData['Delivery Date'],
+        delivery_date: rowData['Delivery Date'].toString(),
         part_no: rowData['Part No'],
         part_name: rowData['Part Name'],
         quantity: rowData['Quantity'] ?? 0,
