@@ -19,6 +19,14 @@ export class HistoriesService {
           new ConflictException('Kode PO ID Tidak Ditemukan di Database'),
         );
       }
+      const isScanned = await this.prismaService.history.findMany({
+        where: {
+          po_id: createHistoryDto.po_id,
+        },
+      });
+      if (isScanned.length > 0) {
+        throw new RpcException(new ConflictException('Kode PO Sudah Di Scan'));
+      }
       return this.prismaService.history.create({
         data: {
           po_id: createHistoryDto.po_id,
