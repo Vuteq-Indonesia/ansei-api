@@ -44,6 +44,12 @@ export class AuthGuard implements CanActivate {
     }
     if (roles) {
       const { user } = request;
+      if (user['role'].includes('SUPER')) {
+        return true;
+      }
+      if (user['role'].includes('ADMIN_ANSEI')) {
+        return true;
+      }
       const hasRole = roles.includes(user['role']);
       if (!hasRole) {
         throw new UnauthorizedException();

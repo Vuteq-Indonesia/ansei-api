@@ -9,7 +9,7 @@ import { CheckHistoryDto } from './dto/check-history.dto';
 export class HistoriesController {
   constructor(private readonly historiesService: HistoriesService) {}
 
-  @Roles(['ADMIN', 'OPERATOR'])
+  @Roles(['ADMIN_ANSEI', 'OPERATOR'])
   @Post('')
   create(@Payload() createHistoryDto: CreateHistoryDto, @Req() req: any) {
     return this.historiesService.create(
@@ -18,7 +18,7 @@ export class HistoriesController {
     );
   }
 
-  @Roles(['ADMIN', 'OPERATOR'])
+  @Roles(['OPERATOR_ANSEI'])
   @Post('failed')
   createFailed(@Payload() createHistoryDto: CreateHistoryDto, @Req() req: any) {
     return this.historiesService.createFailed(
@@ -27,19 +27,19 @@ export class HistoriesController {
     );
   }
 
-  @Roles(['ADMIN'])
+  @Roles(['ADMIN_ANSEI'])
   @Get('')
   findAll(@Payload() options: any) {
     return this.historiesService.findAll(options);
   }
 
-  @Roles(['ADMIN', 'OPERATOR'])
+  @Roles(['OPERATOR_ANSEI'])
   @Post('check')
   findOne(@Body() checkHistoryDto: CheckHistoryDto) {
     return this.historiesService.checkHistory(checkHistoryDto);
   }
 
-  @Roles(['ADMIN'])
+  @Roles(['ADMIN_ANSEI'])
   @Get('report')
   dashboard() {
     return this.historiesService.dashboard();

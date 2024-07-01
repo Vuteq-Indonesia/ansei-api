@@ -26,7 +26,7 @@ export class RawController {
   }
 
   @Get()
-  @Roles(['ADMIN'])
+  @Roles(['ADMIN_ANSEI'])
   findAll(
     @Query('page') pageNumber?: number,
     @Query('limit') pageSize?: number,
