@@ -9,7 +9,7 @@ import { CheckHistoryDto } from './dto/check-history.dto';
 export class HistoriesController {
   constructor(private readonly historiesService: HistoriesService) {}
 
-  @Roles(['ADMIN_ANSEI', 'OPERATOR'])
+  @Roles(['ADMIN_ANSEI', 'OPERATOR_ANSEI'])
   @Post('')
   create(@Payload() createHistoryDto: CreateHistoryDto, @Req() req: any) {
     return this.historiesService.create(
