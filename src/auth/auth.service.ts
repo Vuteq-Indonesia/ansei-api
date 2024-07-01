@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
@@ -14,6 +14,7 @@ export class AuthService {
         secret: this.configService.get('SECRET_KEY'),
       });
     } catch (e) {
+      Logger.error(`An error occurred while verify token: ${e}`);
       return false;
     }
   }

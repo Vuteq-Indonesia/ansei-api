@@ -50,7 +50,7 @@ export class AuthGuard implements CanActivate {
       if (user['role'].includes('ADMIN_ANSEI')) {
         return true;
       }
-      const hasRole = roles.includes(user['role']);
+      const hasRole = roles.some((role) => user['role'].includes(role)); // Check if any role from roles is in user['role']
       if (!hasRole) {
         throw new UnauthorizedException();
       }
