@@ -19,7 +19,7 @@ export class RawService {
       const transformedData = data.map((rowData: any) => ({
         po_id: rowData['PO ID'],
         date: rowData['Date'],
-        delivery_date: rowData['Delivery Date'],
+        delivery_date: rowData['Delivery Date'].toISOString(),
         part_no: rowData['Part No'],
         part_name: rowData['Part Name'],
         quantity: rowData['Quantity'] ?? 0,
